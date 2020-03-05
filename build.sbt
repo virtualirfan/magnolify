@@ -311,22 +311,27 @@ lazy val jmh: Project = project
     compile in Jmh := (compile in Jmh).dependsOn(compile in Test).value,
     run in Jmh := (run in Jmh).dependsOn(compile in Jmh).evaluated,
     libraryDependencies ++= Seq(
-      "org.apache.avro" % "avro" % avroVersion % Test,
-      "com.google.apis" % "google-api-services-bigquery" % bigqueryVersion % Test,
-      "joda-time" % "joda-time" % jodaTimeVersion % Test,
-      "com.google.cloud.datastore" % "datastore-v1-proto-client" % datastoreVersion % Test,
-      "org.tensorflow" % "proto" % tensorflowVersion % Test
+      "com.github.alexarchambault" %% "scalacheck-shapeless_1.14" % "1.2.3",
+      "me.lyh" %% "shapeless-datatype-avro" % "0.2.0",
+      "me.lyh" %% "shapeless-datatype-bigquery" % "0.2.0",
+      "me.lyh" %% "shapeless-datatype-datastore" % "0.2.0",
+      "me.lyh" %% "shapeless-datatype-tensorflow" % "0.2.0",
+      "org.apache.avro" % "avro" % avroVersion,
+      "com.google.apis" % "google-api-services-bigquery" % bigqueryVersion,
+      "joda-time" % "joda-time" % jodaTimeVersion,
+      "com.google.cloud.datastore" % "datastore-v1-proto-client" % datastoreVersion,
+      "org.tensorflow" % "proto" % tensorflowVersion
     )
   )
   .dependsOn(
-    scalacheck % Test,
-    cats % Test,
-    guava % Test,
-    avro % Test,
-    bigquery % Test,
-    datastore % Test,
-    tensorflow % Test,
-    protobuf % Test,
+    scalacheck,
+    cats,
+    guava,
+    avro,
+    bigquery,
+    datastore,
+    tensorflow,
+    protobuf,
     test % "test->test"
   )
   .enablePlugins(JmhPlugin)

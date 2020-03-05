@@ -32,7 +32,7 @@ object MagnolifyBench {
 @BenchmarkMode(Array(Mode.AverageTime))
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
 @State(Scope.Thread)
-class ScalaCheckBench {
+class ScalaCheckBenchXM {
   import MagnolifyBench._
   private val arb = implicitly[Arbitrary[Nested]]
   private val co = implicitly[Cogen[Nested]]
@@ -72,7 +72,7 @@ class CatsBench {
 @BenchmarkMode(Array(Mode.AverageTime))
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
 @State(Scope.Thread)
-class AvroBench {
+class AvroBenchXM {
   import magnolify.avro._
   import org.apache.avro.Schema
   import org.apache.avro.generic.GenericRecord
@@ -81,13 +81,12 @@ class AvroBench {
   private val genericRecord = avroType.to(nested)
   @Benchmark def avroTo: GenericRecord = avroType.to(nested)
   @Benchmark def avroFrom: Nested = avroType.from(genericRecord)
-  @Benchmark def avroSchmea: Schema = avroType.schema
 }
 
 @BenchmarkMode(Array(Mode.AverageTime))
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
 @State(Scope.Thread)
-class TableRowBench {
+class TableRowBenchXM {
   import com.google.api.services.bigquery.model.{TableRow, TableSchema}
   import magnolify.bigquery._
   import MagnolifyBench._
@@ -96,13 +95,12 @@ class TableRowBench {
   private val tableRow = tableRowType.to(nested)
   @Benchmark def tableRowTo: TableRow = tableRowType.to(nested)
   @Benchmark def tableRowFrom: Nested = tableRowType.from(tableRow)
-  @Benchmark def tableRowSchema: TableSchema = tableRowType.schema
 }
 
 @BenchmarkMode(Array(Mode.AverageTime))
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
 @State(Scope.Thread)
-class EntityBench {
+class EntityBenchXM {
   import com.google.datastore.v1.Entity
   import magnolify.datastore._
   import MagnolifyBench._
