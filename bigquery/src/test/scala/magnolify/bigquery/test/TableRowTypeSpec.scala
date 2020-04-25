@@ -91,6 +91,24 @@ object TableRowTypeSpec extends MagnolifySpec("TableRowType") {
     implicit val efInt: TableRowField[Int] = TableRowField.from[Long](_.toInt)(_.toLong)
     implicit val efUri: TableRowField[URI] = TableRowField.from[String](URI.create)(_.toString)
   }
+
+  {
+    val it = TableRowType[DefaultInner]
+    require(it(new TableRow) == DefaultInner())
+    val inner = DefaultInner(2, Some(2), List(2, 2))
+    require(it(it(inner)) == inner)
+
+    val ot = TableRowType[DefaultOuter]
+    require(ot(new TableRow) == DefaultOuter())
+    val outer = DefaultOuter(
+      DefaultInner(3, Some(3), List(3, 3)),
+      Some(DefaultInner(3, Some(3), List(3, 3))))
+    require(ot(ot(outer)) == outer)
+  }
 }
 
 case class BigQueryTypes(i: Instant, d: LocalDate, t: LocalTime, dt: LocalDateTime, bd: BigDecimal)
+
+case class DefaultInner(i: Int = 1, o: Option[Int] = Some(1), l: List[Int] = List(1, 1))
+case class DefaultOuter(i: DefaultInner = DefaultInner(2, Some(2), List(2, 2)),
+                        o: Option[DefaultInner] = Some(DefaultInner(2, Some(2), List(2, 2))))
